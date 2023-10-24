@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/aanganwadi-frontend-test/static/css/main.6d1441b5.css",
-    "main.js": "/aanganwadi-frontend-test/static/js/main.daba3359.js",
+    "main.css": "/aanganwadi-frontend-test/static/css/main.bf968b31.css",
+    "main.js": "/aanganwadi-frontend-test/static/js/main.b401337c.js",
     "index.html": "/aanganwadi-frontend-test/index.html",
-    "main.6d1441b5.css.map": "/aanganwadi-frontend-test/static/css/main.6d1441b5.css.map",
-    "main.daba3359.js.map": "/aanganwadi-frontend-test/static/js/main.daba3359.js.map"
+    "main.bf968b31.css.map": "/aanganwadi-frontend-test/static/css/main.bf968b31.css.map",
+    "main.b401337c.js.map": "/aanganwadi-frontend-test/static/js/main.b401337c.js.map"
   },
   "entrypoints": [
-    "static/css/main.6d1441b5.css",
-    "static/js/main.daba3359.js"
+    "static/css/main.bf968b31.css",
+    "static/js/main.b401337c.js"
   ]
 }
