@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Header from "../Components/Header";
 import Sidebar from "../Components/Sidebar";
-import { RiDeleteBin6Fill } from "react-icons/ri";
+// import { RiDeleteBin6Fill } from "react-icons/ri";
 import { Modal, Table, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
 import axios from "axios";
@@ -113,6 +113,7 @@ const ManageUser = ({ setIsLoggedIn }) => {
       if (response.status === 200) {
         // Notify the user that the user has been deleted
         toast.success("User deleted successfully");
+        
 
         // After deletion, you can refetch the data to update the user list
         fetchData();
@@ -242,14 +243,14 @@ const ManageUser = ({ setIsLoggedIn }) => {
                   <td>{item.users_role_id}</td>
                   <td>
                     <Button
-                      className="btn-danger"
+                      className="btn-sm btn-danger"
                       onClick={() => handleDelete(item.users_id)}
                     >
                       Delete
                     </Button>
                     <Button
                       onClick={() => handleEdit(item)}
-                      className="btn-primary m-2"
+                      className="btn-sm btn-primary m-2"
                     >
                       Edit
                     </Button>
@@ -262,7 +263,7 @@ const ManageUser = ({ setIsLoggedIn }) => {
         <nav>
           <ul className="pagination">
             <li className="page-item">
-              <a href="#" className="page-link" onClick={prePage}>
+              <a href="{#}" className="page-link" onClick={prePage}>
                 Prev
               </a>
             </li>
@@ -271,13 +272,13 @@ const ManageUser = ({ setIsLoggedIn }) => {
                 className={`page-item ${currentPage === n ? "active" : ""}`}
                 key={i}
               >
-                <a href="#" className="page-link" onClick={() => changePage(n)}>
+                <a href="{#}" className="page-link" onClick={() => changePage(n)}>
                   {n}
                 </a>
               </li>
             ))}
             <li className="page-item">
-              <a href="#" className="page-link" onClick={nextPage}>
+              <a href="{#}" className="page-link" onClick={nextPage}>
                 Next
               </a>
             </li>
