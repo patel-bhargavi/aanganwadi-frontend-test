@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/aanganwadi-frontend-test/static/css/main.6d1441b5.css",
+    "main.js": "/aanganwadi-frontend-test/static/js/main.daba3359.js",
+    "index.html": "/aanganwadi-frontend-test/index.html",
+    "main.6d1441b5.css.map": "/aanganwadi-frontend-test/static/css/main.6d1441b5.css.map",
+    "main.daba3359.js.map": "/aanganwadi-frontend-test/static/js/main.daba3359.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.6d1441b5.css",
+    "static/js/main.daba3359.js"
+  ]
+}
