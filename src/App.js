@@ -32,7 +32,7 @@ function App() {
             <Route path='/name-list' element={<NameList />}></Route>
             <Route path='/add-user' element={<AddUser setIsLoggedIn={setIsLoggedIn} />}></Route>
             <Route path='/manage-users' element={<ManageUser setIsLoggedIn={setIsLoggedIn} setIsLoading={setIsLoading} isLoading={isLoading} />}></Route>
-            <Route path='/add-category' element={<AddCategory setIsLoggedIn={setIsLoggedIn} />}></Route>
+            <Route path='/add-category' element={<AddCategory setIsLoggedIn={setIsLoggedIn} setIsLoading={setIsLoading} isLoading={isLoading} />}></Route>
             <Route path='/profile' element={<Profile setIsLoggedIn={setIsLoggedIn} />}></Route>
         
             </Route>

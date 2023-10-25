@@ -1,141 +1,216 @@
-import React from 'react'
-import Header from '../Components/Header';
-import Sidebar from '../Components/Sidebar'
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import toast from 'react-hot-toast';
+import { toast } from "react-toastify";
+
 import "bootstrap/dist/css/bootstrap.css";
-import {  Table, Button } from "react-bootstrap";
+import { Table, Button , Modal } from "react-bootstrap";
+import { useCallback } from 'react';
+import Header from "../Components/Header";
+import Sidebar from "../Components/Sidebar";
+
+const AddCategory = ({ setIsLoading , setIsLoggedIn}) => {
+
+  const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
+
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+const [editFormData, setEditFormData] = useState({ category_name: '' });
+const OpenSidebar = () => {
+  setOpenSidebarToggle(!openSidebarToggle);
+}
+
+const openEditModal = (category) => {
+  setEditFormData(category);
+  setIsEditModalOpen(true);
+};
+
+const closeEditModal = () => {
+  setIsEditModalOpen(false);
+  setEditFormData({ category_name: '' });
+};
+
+  const [formData, setFormData] = useState({
+    category_name: '',
+  });
+  const [categories, setCategories] = useState([]);
+  const token = localStorage.getItem("token");
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
 
-
-// import { useNavigate } from 'react-router-dom';
-
-const AddCategory = ({ setIsLoggedIn }) => {
-    const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
-
-    // const navigate = useNavigate();
-    const OpenSidebar = () => {
-        setOpenSidebarToggle(!openSidebarToggle);
-    };
-
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        password: '',
-        number: '',
-        users_role_id: 'Admin',
-    });
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
-
-    const handleUser = async (e) => {
-        e.preventDefault();
-
-        try {
-            // Make a POST request to the signup endpoint with the token in the Authorization header
-            const token = localStorage.getItem('token')
-            console.log(token)
-            const response = await axios.post('https://aanganwadi-test.onrender.com/api/v1/user/add_user', formData, {
-                headers: {
-                    Token: token // Replace YOUR_TOKEN with the actual token
-                },
-            });
-            console.log('Signup successful:', response.data);
-            toast.success('Added successfully')
-            // navigate('/dashboard');
-
-
-        } catch (error) {
-            console.error('Signup failed:', error);
+  const handleAddCategory = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        'https://aanganwadi-test.onrender.com/api/v1/inventory/add_category',
+        formData,
+        {
+          headers: {
+            Token: token,
+          },
         }
+      );
+
+      const newCategory = response.data; // Assuming the response contains the added category
+      setCategories([...categories, newCategory]);
+      setFormData({ category_name: '' });
+      console.log(newCategory);
+      toast.success('Category added successfully');
+      fetchData();
+    } catch (error) {
+      console.error('Category addition failed:', error);
+      toast.error('Category addition failed');
     }
+  };
 
+  const fetchData = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(
+        "https://aanganwadi-test.onrender.com/api/v1/inventory/get_category",
+        {
+          headers: {
+            Token: token,
+          },
+        }
+      );
+      const responseData = response.data.data;
+      setCategories(responseData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [setIsLoading, token]);
 
-    return (
-        <>
-            <Header OpenSidebar={OpenSidebar} setIsLoggedIn={setIsLoggedIn} />
-            <Sidebar openSidebarToggle={openSidebarToggle} OpenSidebar={OpenSidebar} />
-            <main className="main-container">
-                <div className="custom-container">
-                    <div className="p-5 mb-4 ml-3 bg-light rounded-3 custom-form">
-                        <h2>Add Category</h2>
+  // Call fetchData when the component mounts
+  useEffect(() => {
+    fetchData();
+  }, [token, fetchData]);
 
+  const handleDelete = (categoryId) => {
+    // Implement the logic to delete the category using the categoryId
+  };
 
-                        <form onSubmit={handleUser}>
-                            <div className="mb-3 mt-3">
-                                <label className="form-label">Category Name</label>
-                                <input
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    className="form-control"
-                                    value={formData.name}
-                                    onChange={handleInputChange}
-                                /> <br />
-                            </div>
-                           
-                            <button className="btn btn-primary">Add Category</button>
-                        </form>
+  const handleUpdateCategory = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        `https://aanganwadi-test.onrender.com/api/v1/inventory/edit_category/${editFormData.id}`,
+        editFormData,
+        {
+          headers: {
+            Token: token,
+          },
+        }
+      );
+        console.log(response);
+      // Update the category list with the updated data
+      setCategories((prevCategories) =>
+        prevCategories.map((category) =>
+          category.id === editFormData.id ? response.data : category
+        )
+      );
+  
+      toast.success('Category updated successfully');
+      closeEditModal();
+    } catch (error) {
+      console.error('Category update failed:', error);
+      toast.error('Category update failed');
+    }
+  };
+  
 
-                                </div>
-                        <Table responsive className="table table-striped table-hover">
+  return (
+    <>
+    <Header OpenSidebar={OpenSidebar} setIsLoggedIn={setIsLoggedIn} />
+      <Sidebar openSidebarToggle={openSidebarToggle} OpenSidebar={OpenSidebar} />
+    <main className="main-container">
+      <div className="custom-container">
+        <div className="p-5 mb-4 ml-3 bg-light rounded-3 custom-form">
+          <h2>Add Category</h2>
+          <form onSubmit={handleAddCategory}>
+            <div className="mb-3 mt-3">
+              <label className="form-label">Category Name</label>
+              <input
+                type="text"
+                name="category_name"
+                className="form-control"
+                value={formData.category_name}
+                onChange={handleInputChange}
+              />
+            </div>
+            <button className="btn btn-primary">Add Category</button>
+          </form>
+        </div>
+        <div className="table-responsive">
+          <Table responsive className="table table-striped table-hover">
             <thead>
               <tr>
-              
-                <th>Name</th>
+                <th>ID</th>
+                <th>Category Name</th>
                 <th>Action</th>
-               
               </tr>
             </thead>
             <tbody>
-             
-                <tr>
-                  <td>Food</td>          
+              {categories.map((category, index) => (
+                <tr key={category.id}>
+                  <td>{index + 1}</td>
+                  <td>{category.category_name}</td>
                   <td>
                     <Button
                       className="btn-sm btn-danger"
-                    //   onClick={() => handleDelete(item.users_id)}
+                      onClick={() => handleDelete(category.id)}
                     >
                       Delete
                     </Button>
                     <Button
-                    //   onClick={() => handleEdit(item)}
                       className="btn-sm btn-primary m-2"
+                      onClick={() => openEditModal(category)}
                     >
                       Edit
                     </Button>
                   </td>
                 </tr>
-                <tr>
-                  <td>Health</td>          
-                  <td>
-                    <Button
-                      className="btn-sm btn-danger"
-                    //   onClick={() => handleDelete(item.users_id)}
-                    >
-                      Delete
-                    </Button>
-                    <Button
-                    //   onClick={() => handleEdit(item)}
-                      className="btn-sm btn-primary m-2"
-                    >
-                      Edit
-                    </Button>
-                  </td>
-                </tr>
-            
+              ))}
             </tbody>
           </Table>
-                </div>
+        </div>
+      </div>
+    </main>
 
-
-            </main>
+<Modal show={isEditModalOpen} onHide={closeEditModal}>
+<Modal.Header closeButton>
+  <Modal.Title>Edit Category</Modal.Title>
+</Modal.Header>
+<Modal.Body>
+  <form onSubmit={handleUpdateCategory}>
+    <div className="mb-3">
+      <label className="form-label">Category Name</label>
+      <input
+        type="text"
+        name="category_name"
+        className="form-control"
+        value={editFormData.category_name}
+        onChange={(e) =>
+          setEditFormData({
+            ...editFormData,
+            [e.target.name]: e.target.value,
+          })
+        }
+        />
+    </div>
+    <Button type="submit" variant="primary">
+      Update
+    </Button>
+  </form>
+</Modal.Body>
+</Modal>
         </>
-    )
-}
 
-export default AddCategory
+  );
+};
+
+export default AddCategory;
