@@ -206,7 +206,11 @@ const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
           </ul>
         </nav>
       </main>
-      <Modal show={isModalVisible} onClose={closeModal}>
+      <Modal show={isModalVisible} onHide={closeModal}>
+      <Modal.Header closeButton>
+  <Modal.Title>Edit User</Modal.Title>
+</Modal.Header>
+<Modal.Body>
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -268,11 +272,11 @@ const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
             <button type="submit" className="btn btn-primary m-1">
               Update
             </button>
-            <button className="btn btn-primary m-1" onClick={closeModal}>
-              Close
-            </button>
+            
           </div>
         </form>
+</Modal.Body>
+
       </Modal>
     </>
   );

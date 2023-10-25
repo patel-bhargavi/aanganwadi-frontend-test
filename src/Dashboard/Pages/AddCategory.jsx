@@ -57,8 +57,8 @@ const closeEditModal = () => {
       setCategories([...categories, newCategory]);
       setFormData({ category_name: '' });
       console.log(newCategory);
-      toast.success('Category added successfully');
       fetchData();
+      toast.success('Category added successfully');
     } catch (error) {
       console.error('Category addition failed:', error);
       toast.error('Category addition failed');
