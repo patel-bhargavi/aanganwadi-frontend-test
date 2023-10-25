@@ -3,16 +3,16 @@ import Header from '../Components/Header';
 import Sidebar from '../Components/Sidebar'
 import { useState } from 'react';
 import axios from 'axios';
-import toast from 'react-hot-toast';
+import {toast} from 'react-toastify';
 import "bootstrap/dist/css/bootstrap.css";
 
 
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const AddUser = ({ setIsLoggedIn }) => {
     const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
 
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
     const OpenSidebar = () => {
         setOpenSidebarToggle(!openSidebarToggle);
     };
@@ -42,10 +42,19 @@ const AddUser = ({ setIsLoggedIn }) => {
                     Token: token // Replace YOUR_TOKEN with the actual token
                 },
             });
+            
             console.log('Signup successful:', response.data);
-            toast.success('Added successfully')
-            // navigate('/dashboard');
 
+            setFormData({
+                name: '',
+                email: '',
+                password: '',
+                number: '',
+                users_role_id: 'Admin',
+            });
+            
+            toast.success("User Added Successfully");
+            navigate('/manage-users')
 
         } catch (error) {
             console.error('Signup failed:', error);
@@ -87,7 +96,7 @@ const AddUser = ({ setIsLoggedIn }) => {
                             </div>
                             <div className="mb-3">
 
-                            <label className="form-label">Password</label> <label for="password">Password:</label>
+                            <label className="form-label">Password</label> 
                             <input
                                 type="password"
                                 id="password"
@@ -99,7 +108,7 @@ const AddUser = ({ setIsLoggedIn }) => {
 
                            <div className="mb-3">
 
-                           <label className="form-label">Phone Number</label>  <label for="number">Phone Number:</label>
+                           <label className="form-label">Phone Number</label>
                             <input
                                 type="tel"
                                 id="number"
@@ -112,11 +121,16 @@ const AddUser = ({ setIsLoggedIn }) => {
 
                             <div className="mb-3">
           <label className="form-label">Role</label>
-                            <select className="form-select" name="users_role_id" id="users_role_id">
-                                <option value={formData.users_role_id}
-                                    onChange={handleInputChange}>Admin</option>
-                                <option value={formData.users_role_id}
-                                    onChange={handleInputChange}>Employee</option>
+                            <select className="form-select" name="users_role_id" id="users_role_id" 
+                            value={formData.users_role_id}
+                                    onChange={handleInputChange}
+                                    >
+                                <option 
+                               
+                                    >Admin</option>
+                                <option 
+                                
+                                    >Employee</option>
 
                             </select>
                             </div>
