@@ -38,7 +38,7 @@ const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
     setIsLoading(true); // Show loader while fetching data
     try {
       const response = await axios.get(
-        "https://aanganwadi-test.onrender.com/api/v1/user/get_users/0",
+        `https://aanganwadi-test.onrender.com/api/v1/user/get_users/${currentPage}`,
         {
           params: {
             page: currentPage,
@@ -50,6 +50,7 @@ const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
         }
       );
       const responseData = response.data.data;
+      console.log(responseData)
       setData(responseData);
       setTotalItems(response.data.total_items);
     } catch (error) {
