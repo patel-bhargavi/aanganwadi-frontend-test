@@ -8,12 +8,16 @@ import { useCallback } from 'react';
 import Header from "../Components/Header";
 import Sidebar from "../Components/Sidebar";
 
+
 const AddCategory = ({ setIsLoading , setIsLoggedIn}) => {
 
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 const [editFormData, setEditFormData] = useState({ category_name: '' });
+const [showDeleteModal, setShowDeleteModal] = useState(false);
+const [categoryToDelete, setCategoryToDelete] = useState(null);
+
 const OpenSidebar = () => {
   setOpenSidebarToggle(!openSidebarToggle);
 }
@@ -27,6 +31,13 @@ const closeEditModal = () => {
   setIsEditModalOpen(false);
   setEditFormData({ category_name: '' });
 };
+
+const handleDelete = (categoryId) => {
+  const categoryToDelete = categories.find((category) => category.id === categoryId);
+  setCategoryToDelete(categoryToDelete);
+  setShowDeleteModal(true);
+};
+
 
   const [formData, setFormData] = useState({
     category_name: '',
@@ -90,9 +101,26 @@ const closeEditModal = () => {
     fetchData();
   }, [token, fetchData]);
 
-  const handleDelete = (categoryId) => {
-    // Implement the logic to delete the category using the categoryId
+  const confirmDeleteCategory = async () => {
+    try {
+      await axios.delete(`https://aanganwadi-test.onrender.com/api/v1/inventory/delete_category/${categoryToDelete.id}`, {
+        headers: {
+          Token: token,
+        },
+      });
+  
+      // Remove the deleted category from the categories list
+      setCategories((prevCategories) => prevCategories.filter((category) => category.id !== categoryToDelete.id));
+  
+      toast.success('Category deleted successfully');
+    } catch (error) {
+      console.error('Category deletion failed:', error);
+      toast.error('Category deletion failed');
+    }
+  
+    setShowDeleteModal(false);
   };
+  
 
   const handleUpdateCategory = async (e) => {
     e.preventDefault();
@@ -208,6 +236,23 @@ const closeEditModal = () => {
   </form>
 </Modal.Body>
 </Modal>
+<Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
+  <Modal.Header closeButton>
+    <Modal.Title>Confirm Deletion</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    <p>Are you sure you want to delete the category: {categoryToDelete ? categoryToDelete.category_name : ''}?</p>
+  </Modal.Body>
+  <Modal.Footer>
+    <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+      Cancel
+    </Button>
+    <Button variant="danger" onClick={confirmDeleteCategory}>
+      Delete
+    </Button>
+  </Modal.Footer>
+</Modal>
+
         </>
 
   );

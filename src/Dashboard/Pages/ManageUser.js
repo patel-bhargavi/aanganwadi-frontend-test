@@ -15,15 +15,17 @@ const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [totalItems, setTotalItems] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
   const token = localStorage.getItem("token");
+
+  const itemsPerPage = 10;
 
   const closeModal = () => {
     setEditUserData(null);
     setSelectedUserId(null);
     setModalVisibility(false);
   };
+
   const OpenSidebar = () => {
     setOpenSidebarToggle(!openSidebarToggle);
   };
@@ -32,16 +34,16 @@ const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
     setEditUserData(user);
     setSelectedUserId(user.users_id);
     setModalVisibility(true);
-  };                                                                
+  };
 
-  const fetchData = useCallback(async () => {
-    setIsLoading(true); // Show loader while fetching data
+  const fetchData = useCallback(async (page) => {
+    setIsLoading(true);
     try {
       const response = await axios.get(
-        "https://aanganwadi-test.onrender.com/api/v1/user/get_users/0",
+        `https://aanganwadi-test.onrender.com/api/v1/user/get_users/${page}`,
         {
           params: {
-            page: currentPage,
+            page: page,
             perPage: itemsPerPage,
           },
           headers: {
@@ -51,17 +53,18 @@ const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
       );
       const responseData = response.data.data;
       setData(responseData);
-      setTotalItems(response.data.total_items);
+      setTotalPages(Math.ceil(response.data.total_items / itemsPerPage));
+      setCurrentPage(page);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
-      setIsLoading(false); // Hide loader when data fetching is complete
+      setIsLoading(false);
     }
-  }, [currentPage, itemsPerPage,setIsLoading, token]);
+  }, [setIsLoading, token, itemsPerPage]);
 
   useEffect(() => {
-    fetchData();
-  }, [currentPage, itemsPerPage, token, fetchData]);
+    fetchData(currentPage);
+  }, [currentPage, fetchData]);
 
   const handleUpdate = async (updatedUserData) => {
     try {
@@ -77,7 +80,7 @@ const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
       );
       console.log(response);
       closeModal();
-      fetchData();
+      fetchData(currentPage);
       toast.success("Updated successfully");
     } catch (error) {
       console.error("Error updating user data:", error);
@@ -97,7 +100,7 @@ const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
       );
       console.log(response);
       if (response.status === 200) {
-        fetchData();
+        fetchData(currentPage);
         toast.success("User deleted successfully");
       } else {
         console.error("Error deleting user:", response);
@@ -107,14 +110,11 @@ const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
     }
   };
 
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-
   const renderData = () => {
-    const lastIndex = currentPage * itemsPerPage;
-    const firstIndex = lastIndex - itemsPerPage;
-    return data.slice(firstIndex, lastIndex).map((item, index) => (
+    const startIndex = (currentPage - 1) * itemsPerPage + 1;
+    return data.map((item, index) => (
       <tr key={index}>
-        <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
+        <td>{startIndex + index}</td>
         <td>{item.name}</td>
         <td>{item.email}</td>
         <td>{item.number}</td>
@@ -138,31 +138,45 @@ const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
   };
 
   const handlePageClick = (pageNumber) => {
-    setCurrentPage(pageNumber);
+    if (pageNumber >= 1 && pageNumber <= totalPages) {
+      fetchData(pageNumber);
+    }
   };
 
   const renderPagination = () => {
     const pageNumbers = [];
     for (let i = 1; i <= totalPages; i++) {
       pageNumbers.push(
-        <li key={i} onClick={() => handlePageClick(i)}>
+        <li
+          key={i}
+          className={i === currentPage ? "active" : ""}
+          onClick={() => handlePageClick(i)}
+        >
           {i}
         </li>
       );
     }
-    return <ul>{pageNumbers}</ul>;
-  };
-
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
+    return (
+      <ul className="pagination">
+        <li>
+          <button
+            onClick={() => handlePageClick(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+        </li>
+        {pageNumbers}
+        <li>
+          <button
+            onClick={() => handlePageClick(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </li>
+      </ul>
+    );
   };
 
   return (
@@ -194,89 +208,76 @@ const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
           </div>
         )}
 
-        <nav>
-          <ul className="pagination">
-            <li>
-              <button onClick={handlePrevPage}>Previous</button>
-            </li>
-            {renderPagination()}
-            <li>
-              <button onClick={handleNextPage}>Next</button>
-            </li>
-          </ul>
-        </nav>
+        <nav>{renderPagination()}</nav>
       </main>
       <Modal show={isModalVisible} onHide={closeModal}>
-      <Modal.Header closeButton>
-  <Modal.Title>Edit User</Modal.Title>
-</Modal.Header>
-<Modal.Body>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            const updatedUserData = {
-              users_id: selectedUserId,
-              name: e.target.name.value,
-              email: e.target.email.value,
-              number: e.target.number.value,
-              users_role_id: e.target.users_role_id.value,
-            };
-
-            handleUpdate(updatedUserData);
-          }}
-        >
-          <div className="mb-3 mt-3">
-            <label className="form-label">Name</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              className="form-control"
-              defaultValue={editUserData ? editUserData.name : ""}
-            />{" "}
-            <br />
-          </div>
-          <div className="mb-3">
-            <label className="form-label">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              className="form-control"
-              defaultValue={editUserData ? editUserData.email : ""}
-            />
-          </div>
-          <div className="mb-3">
-            <label className="form-label">Mobile No</label>
-            <input
-              type="tel"
-              id="number"
-              name="number"
-              className="form-control"
-              defaultValue={editUserData ? editUserData.number : ""}
-            />
-          </div>
-          <div className="mb-3">
-            <label className="form-label">Role</label>
-            <select
-              className="form-select"
-              name="users_role_id"
-              id="users_role_id"
-              defaultValue={editUserData ? editUserData.users_role_id : "Admin"}
-            >
-              <option value="Admin">Admin</option>
-              <option value="Employee">Employee</option>
-            </select>
-          </div>
-          <div className="mb-3 text-center">
-            <button type="submit" className="btn btn-primary m-1">
-              Update
-            </button>
-            
-          </div>
-        </form>
-</Modal.Body>
-
+        <Modal.Header closeButton>
+          <Modal.Title>Edit User</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              const updatedUserData = {
+                users_id: selectedUserId,
+                name: e.target.name.value,
+                email: e.target.email.value,
+                number: e.target.number.value,
+                users_role_id: e.target.users_role_id.value,
+              };
+              handleUpdate(updatedUserData);
+            }}
+          >
+            <div className="mb-3 mt-3">
+              <label className="form-label">Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                className="form-control"
+                defaultValue={editUserData ? editUserData.name : ""}
+              />{" "}
+              <br />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                className="form-control"
+                defaultValue={editUserData ? editUserData.email : ""}
+              />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Mobile No</label>
+              <input
+                type="tel"
+                id="number"
+                name="number"
+                className="form-control"
+                defaultValue={editUserData ? editUserData.number : ""}
+              />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Role</label>
+              <select
+                className="form-select"
+                name="users_role_id"
+                id="users_role_id"
+                defaultValue={editUserData ? editUserData.users_role_id : "Admin"}
+              >
+                <option value="Admin">Admin</option>
+                <option value="Employee">Employee</option>
+              </select>
+            </div>
+            <div className="mb-3 text-center">
+              <button type="submit" className="btn btn-primary m-1">
+                Update
+              </button>
+            </div>
+          </form>
+        </Modal.Body>
       </Modal>
     </>
   );
