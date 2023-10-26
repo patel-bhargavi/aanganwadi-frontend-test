@@ -40,11 +40,7 @@ const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-
         `https://aanganwadi-test.onrender.com/api/v1/user/get_users/${page}`,
-
-        `https://aanganwadi-test.onrender.com/api/v1/user/get_users/${currentPage}`,
-
         {
           params: {
             page: page,
@@ -56,7 +52,6 @@ const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
         }
       );
       const responseData = response.data.data;
-      console.log(responseData)
       setData(responseData);
       setTotalPages(Math.ceil(response.data.total_items / itemsPerPage));
       setCurrentPage(page);
