@@ -1,7 +1,7 @@
 
-    import {AiOutlineUsergroupAdd,AiOutlineClose,AiOutlineAppstoreAdd} from 'react-icons/ai';
-    import {MdOutlineManageAccounts} from 'react-icons/md';
-    import {LuLayoutDashboard} from 'react-icons/lu';
+import { AiOutlineUsergroupAdd, AiOutlineClose, AiOutlineAppstoreAdd } from 'react-icons/ai';
+import { MdOutlineManageAccounts } from 'react-icons/md';
+import { LuLayoutDashboard } from 'react-icons/lu';
 
 function Sidebar({ openSidebarToggle, OpenSidebar }) {
 
@@ -40,14 +40,14 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
                         <MdOutlineManageAccounts className='icon' /> Manage Users
                     </a>
                 </li>
-                <hr  className='text-white'/>
+                <hr className='text-white' />
                 <p className='text-white m-3'>Category </p>
                 <li className='sidebar-list-item'>
                     <a href={`/add-category`}>
                         <AiOutlineAppstoreAdd className='icon' /> Add Category
                     </a>
                 </li>
-
+              
 
             </ul>
         </aside>

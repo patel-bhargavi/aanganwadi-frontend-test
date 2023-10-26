@@ -1,23 +1,29 @@
 import React, { useState, useEffect } from "react";
 import Header from "../Components/Header";
 import Sidebar from "../Components/Sidebar";
-// import { RiDeleteBin6Fill } from "react-icons/ri";
 import { Modal, Table, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
 import axios from "axios";
-// import { useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
 import { useCallback } from "react";
+import Spinner from '../Components/Spinner'
 
-const ManageUser = ({ setIsLoggedIn }) => {
+const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
   const [isModalVisible, setModalVisibility] = useState(false);
   const [editUserData, setEditUserData] = useState(null);
   const [selectedUserId, setSelectedUserId] = useState(null);
-  // const [records, setRecords] = useState([]);
-  // const [roleFilter, setRoleFilter] = useState("");
-  // const navigate = useNavigate();
+  const [data, setData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
+  const token = localStorage.getItem("token");
 
+  const closeModal = () => {
+    setEditUserData(null);
+    setSelectedUserId(null);
+    setModalVisibility(false);
+  };
   const OpenSidebar = () => {
     setOpenSidebarToggle(!openSidebarToggle);
   };
@@ -26,20 +32,10 @@ const ManageUser = ({ setIsLoggedIn }) => {
     setEditUserData(user);
     setSelectedUserId(user.users_id);
     setModalVisibility(true);
-  };
-
-  const closeModal = () => {
-    setEditUserData(null);
-    setSelectedUserId(null);
-    setModalVisibility(false);
-  };
-
-  const [data, setData] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
-  const token = localStorage.getItem("token");
+  };                                                                
 
   const fetchData = useCallback(async () => {
+    setIsLoading(true); // Show loader while fetching data
     try {
       const response = await axios.get(
         "https://aanganwadi-test.onrender.com/api/v1/user/get_users/0",
@@ -53,29 +49,22 @@ const ManageUser = ({ setIsLoggedIn }) => {
           },
         }
       );
-
       const responseData = response.data.data;
-      console.log(responseData);
       setData(responseData);
-      // setRecords(responseData);
+      setTotalItems(response.data.total_items);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setIsLoading(false); // Hide loader when data fetching is complete
     }
-  }, [currentPage, itemsPerPage, token]);
+  }, [currentPage, itemsPerPage,setIsLoading, token]);
 
   useEffect(() => {
-    fetchData(); // Call the function directly
-
-    // Rest of your useEffect code
-  }, [currentPage, itemsPerPage, token, fetchData]); // Add fetchData as a dependency
-
-  const [count, setCount] = useState(1);
+    fetchData();
+  }, [currentPage, itemsPerPage, token, fetchData]);
 
   const handleUpdate = async (updatedUserData) => {
     try {
-      setCount(count + 1);
-
-      // Assign the new ID to the updatedUserData
       const userId = updatedUserData.users_id;
       const response = await axios.post(
         `https://aanganwadi-test.onrender.com/api/v1/user/edit_user/${userId}`,
@@ -86,8 +75,6 @@ const ManageUser = ({ setIsLoggedIn }) => {
           },
         }
       );
-
-      // Close the modal after a successful update
       console.log(response);
       closeModal();
       fetchData();
@@ -99,10 +86,9 @@ const ManageUser = ({ setIsLoggedIn }) => {
 
   const handleDelete = async (userId) => {
     try {
-      // Send a POST request to the API for user deletion
       const response = await axios.post(
         `https://aanganwadi-test.onrender.com/api/v1/user/delete_user/${userId}`,
-        null, // The request body is empty
+        null,
         {
           headers: {
             Token: token,
@@ -111,12 +97,8 @@ const ManageUser = ({ setIsLoggedIn }) => {
       );
       console.log(response);
       if (response.status === 200) {
-        // Notify the user that the user has been deleted
-        toast.success("User deleted successfully");
-        
-
-        // After deletion, you can refetch the data to update the user list
         fetchData();
+        toast.success("User deleted successfully");
       } else {
         console.error("Error deleting user:", response);
       }
@@ -125,167 +107,110 @@ const ManageUser = ({ setIsLoggedIn }) => {
     }
   };
 
-  const lastIndex = currentPage * itemsPerPage;
-  const firstIndex = lastIndex - itemsPerPage;
-  const currentItems = data.slice(firstIndex, lastIndex);
-  const nPages = Math.ceil(data.length / itemsPerPage);
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-  // const nPages = Math.ceil(Data.length / recordsPerPage);
-  const numbers = [...Array(nPages + 1).keys()].slice(1);
+  const renderData = () => {
+    const lastIndex = currentPage * itemsPerPage;
+    const firstIndex = lastIndex - itemsPerPage;
+    return data.slice(firstIndex, lastIndex).map((item, index) => (
+      <tr key={index}>
+        <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
+        <td>{item.name}</td>
+        <td>{item.email}</td>
+        <td>{item.number}</td>
+        <td>{item.users_role_id}</td>
+        <td>
+          <Button
+            className="btn-sm btn-danger"
+            onClick={() => handleDelete(item.users_id)}
+          >
+            Delete
+          </Button>
+          <Button
+            onClick={() => handleEdit(item)}
+            className="btn-sm btn-primary m-2"
+          >
+            Edit
+          </Button>
+        </td>
+      </tr>
+    ));
+  };
 
-  // const changePage = (page) => {
-  //   console.log("Changing page to:", page);
-  //   if (page < 0) {
-  //     setCurrentPage(0);
-  //   } else if (page >= totalPages) {
-  //     setCurrentPage(totalPages - 1);
-  //   } else {
-  //     setCurrentPage(page);
-  //   }
-  // };
-  function prePage() {
-    if (currentPage !== 1) {
-      setCurrentPage(currentPage - 1);
+  const handlePageClick = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const renderPagination = () => {
+    const pageNumbers = [];
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(
+        <li key={i} onClick={() => handlePageClick(i)}>
+          {i}
+        </li>
+      );
     }
-  }
+    return <ul>{pageNumbers}</ul>;
+  };
 
-  function changePage(n) {
-    setCurrentPage(n);
-  }
-
-  function nextPage() {
-    if (currentPage !== nPages) {
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
     }
-  }
+  };
 
-  // const Filter = (event) => {
-  //   const { value } = event.target;
-  //   let filteredData = data.filter((f) => {
-  //     const searchValue = value.toLowerCase();
-  //     return (
-  //       (f.name && f.name.toLowerCase().includes(searchValue)) ||
-  //       (f.users_id &&
-  //         f.users_id.toString().toLowerCase().includes(searchValue)) ||
-  //       (f.email && f.email.toLowerCase().includes(searchValue)) ||
-  //       (f.number && f.number.toLowerCase().includes(searchValue)) ||
-  //       (f.users_role_id &&
-  //         f.users_role_id.toLowerCase() === value.toLowerCase())
-  //     );
-  //   });
-
-  //   if (value === "") {
-  //     filteredData = data;
-  //   }
-
-  //   setRecords(filteredData);
-  // };
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
   return (
     <>
       <Header OpenSidebar={OpenSidebar} setIsLoggedIn={setIsLoggedIn} />
-      <Sidebar
-        openSidebarToggle={openSidebarToggle}
-        OpenSidebar={OpenSidebar}
-      />
+      <Sidebar openSidebarToggle={openSidebarToggle} OpenSidebar={OpenSidebar} />
       <main className="main-container">
         <div className="main-title">
           <h3>MANAGE USERS</h3>
         </div>
 
-        {/* <div className="d-flex justify-content-end grid gap-3">
-          <input
-            className="search mb-3 rounded p-2"
-            placeholder="Search...."
-            onChange={Filter}
-          />
-
-          <select
-            className="mb-3 rounded p-2 filter"
-            onChange={(e) => {
-              setRoleFilter(e.target.value);
-              Filter(e); // Call the filter function when the select value changes
-            }}
-            name="role"
-            value={roleFilter}
-          >
-            <option className="opt" value="">
-              All
-            </option>
-            <option className="opt" value="Admin">
-              Admin
-            </option>
-            <option className="opt" value="Employee">
-              Employee
-            </option>
-          </select>
-        </div> */}
-
-        <div className="table-responsive">
-          <Table responsive className="table table-striped table-hover">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Mobile No</th>
-                <th>Role</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentItems.map((item, index) => (
-                <tr key={index}>
-                  <td>{item.users_id}</td>
-                  <td>{item.name}</td>
-                  <td>{item.email}</td>
-                  <td>{item.number}</td>
-                  <td>{item.users_role_id}</td>
-                  <td>
-                    <Button
-                      className="btn-sm btn-danger"
-                      onClick={() => handleDelete(item.users_id)}
-                    >
-                      Delete
-                    </Button>
-                    <Button
-                      onClick={() => handleEdit(item)}
-                      className="btn-sm btn-primary m-2"
-                    >
-                      Edit
-                    </Button>
-                  </td>
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <div className="table-responsive">
+            <Table responsive className="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Mobile No</th>
+                  <th>Role</th>
+                  <th>Action</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-        </div>
+              </thead>
+              <tbody>{renderData()}</tbody>
+            </Table>
+          </div>
+        )}
+
         <nav>
           <ul className="pagination">
-            <li className="page-item">
-              <a href="{#}" className="page-link" onClick={prePage}>
-                Prev
-              </a>
+            <li>
+              <button onClick={handlePrevPage}>Previous</button>
             </li>
-            {numbers.map((n, i) => (
-              <li
-                className={`page-item ${currentPage === n ? "active" : ""}`}
-                key={i}
-              >
-                <a href="{#}" className="page-link" onClick={() => changePage(n)}>
-                  {n}
-                </a>
-              </li>
-            ))}
-            <li className="page-item">
-              <a href="{#}" className="page-link" onClick={nextPage}>
-                Next
-              </a>
+            {renderPagination()}
+            <li>
+              <button onClick={handleNextPage}>Next</button>
             </li>
           </ul>
         </nav>
       </main>
-      <Modal show={isModalVisible} onClose={closeModal}>
+      <Modal show={isModalVisible} onHide={closeModal}>
+      <Modal.Header closeButton>
+  <Modal.Title>Edit User</Modal.Title>
+</Modal.Header>
+<Modal.Body>
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -347,11 +272,11 @@ const ManageUser = ({ setIsLoggedIn }) => {
             <button type="submit" className="btn btn-primary m-1">
               Update
             </button>
-            <button className="btn btn-primary m-1" onClick={closeModal}>
-              Close
-            </button>
+            
           </div>
         </form>
+</Modal.Body>
+
       </Modal>
     </>
   );
