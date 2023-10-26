@@ -386,40 +386,39 @@ input:checked + .slider:before {
 }
 
 
-/* Pagination */
-.pagination-container {
+/* Pagination Styles */
+.pagination {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  font-weight: 500;
-  font-size: 15px;
+  justify-content: right;
+  list-style: none;
+  padding: 0;
 }
- 
-.pagination-container a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: black;
-  height: 40px;
-  width: 40px;
-  text-decoration: none;
-  transition: background-color .2s;
-  border: 1px solid #ddd;
-  cursor: pointer;
-   
+
+.pagination li {
+  margin: 0 5px;
 }
- 
-.pagination-container a.active {
+
+.pagination button {
   background-color: #007bff;
-  color: white;
-  border: 1px solid #7cbddb;
+  color: #fff;
+  border: 1px solid #007bff;
+  padding: 5px 10px;
+  cursor: pointer;
 }
- 
-.pagination-container a.disabled { 
-  opacity: 0.2;
+
+.pagination button:hover {
+  background-color: #0056b3;
 }
-.pagination-container a:hover:not(.active) {background-color: rgb(238, 238, 238);}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination .active button {
+  background-color: #0056b3;
+}
+
 
 search , .filter{
   background-color: #f0f0f0;

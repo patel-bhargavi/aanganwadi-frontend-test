@@ -149,33 +149,39 @@ const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
       pageNumbers.push(
         <li
           key={i}
-          className={i === currentPage ? "active" : ""}
+          className={`page-item ${i === currentPage ? 'active' : ''}`}
           onClick={() => handlePageClick(i)}
         >
-          {i}
+          <a className="page-link" href="#">
+            {i}
+          </a>
         </li>
       );
     }
     return (
+      <nav aria-label="Page navigation">
       <ul className="pagination">
-        <li>
-          <button
+        <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+          <a
+            className="page-link"
+            href="#"
             onClick={() => handlePageClick(currentPage - 1)}
-            disabled={currentPage === 1}
           >
             Previous
-          </button>
+          </a>
         </li>
         {pageNumbers}
-        <li>
-          <button
+        <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+          <a
+            className="page-link"
+            href="#"
             onClick={() => handlePageClick(currentPage + 1)}
-            disabled={currentPage === totalPages}
           >
             Next
-          </button>
+          </a>
         </li>
       </ul>
+    </nav>
     );
   };
 
