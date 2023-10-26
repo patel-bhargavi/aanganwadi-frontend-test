@@ -40,11 +40,11 @@ const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-<<<<<<< HEAD
+
         `https://aanganwadi-test.onrender.com/api/v1/user/get_users/${page}`,
-=======
+
         `https://aanganwadi-test.onrender.com/api/v1/user/get_users/${currentPage}`,
->>>>>>> 1c7c880c2007c0fb9467b1dbedb0213e8976ecca
+
         {
           params: {
             page: page,
