@@ -41,12 +41,12 @@ function Login({ setIsLoggedIn, isLoggedIn , isLoading , setIsLoading}) {
             <form className="form" onSubmit={handleLogin}>
               <h1 className="text-center mb-4 fw-bold">Login</h1>
               <div className="mb-3">
-                <label htmlFor="username" className="form-label fw-bold float-start">
+                {/* <label htmlFor="username" className="form-label fw-bold float-start">
                   Username
-                </label>
+                </label> */}
                 <input
                   type="text"
-                  placeholder="Enter Username"
+                  placeholder="Enter Your Email"
                   id="email"
                   className="form-control"
                   required
@@ -54,12 +54,12 @@ function Login({ setIsLoggedIn, isLoggedIn , isLoading , setIsLoading}) {
                 />
               </div>
               <div className="mb-5">
-                <label htmlFor="password" className="form-label fw-bold float-start">
+                {/* <label htmlFor="password" className="form-label fw-bold float-start">
                   Password
-                </label>
+                </label> */}
                 <input
                   type="password"
-                  placeholder="Enter Password"
+                  placeholder="Enter Your Password"
                   name=""
                   id="password"
                   className="form-control"

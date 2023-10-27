@@ -2,6 +2,8 @@
 import { AiOutlineUsergroupAdd, AiOutlineClose, AiOutlineAppstoreAdd } from 'react-icons/ai';
 import { MdOutlineManageAccounts } from 'react-icons/md';
 import { LuLayoutDashboard } from 'react-icons/lu';
+import {CgProfile} from 'react-icons/cg'
+import {BiLogOut} from 'react-icons/bi'
 
 function Sidebar({ openSidebarToggle, OpenSidebar }) {
 
@@ -9,7 +11,7 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
         <aside id="sidebar" className={openSidebarToggle ? "sidebar-responsive" : ""} >
             <div className='sidebar-title'>
                 <div className='sidebar-brand'>
-                    <h1 className='icon_header text-white'>AanganWares</h1>
+                    <h1 className='icon_header'>Aanganwadi</h1>
                     {/* <h1 className='icon_header text-white'>AanganMate</h1> */}
                 </div>
                 <span className='icon close_icon' onClick={OpenSidebar}><AiOutlineClose color="#D3D3D3" /></span>
@@ -28,8 +30,8 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
                         <AiOutlineUnorderedList className='icon' /> Aanganwadis
                     </a>
                 </li> */}
-                <hr className='text-white' />
-                <p className='text-white m-3'>Users </p>
+                <hr className='' />
+                <p className='m-3'>Users </p>
                 <li className='sidebar-list-item'>
                     <a href={`/add-user`}>
                         <AiOutlineUsergroupAdd className='icon' /> Add User
@@ -40,11 +42,23 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
                         <MdOutlineManageAccounts className='icon' /> Manage Users
                     </a>
                 </li>
-                <hr className='text-white' />
-                <p className='text-white m-3'>Category </p>
+                <hr className='' />
+                <p className=' m-3'>Category </p>
                 <li className='sidebar-list-item'>
                     <a href={`/add-category`}>
                         <AiOutlineAppstoreAdd className='icon' /> Add Category
+                    </a>
+                </li>
+                <hr className='' />
+                 
+                <li className='sidebar-list-item'>
+                    <a href={`/profile`}>
+                        <CgProfile className='icon' /> Profile
+                    </a>
+                </li>
+                <li className='sidebar-list-item'>
+                    <a href={`/`}>
+                        <BiLogOut className='icon' />Logout
                     </a>
                 </li>
               

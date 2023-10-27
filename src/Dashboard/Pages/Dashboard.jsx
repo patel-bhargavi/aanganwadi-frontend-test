@@ -90,7 +90,7 @@ function Dashboard({setIsLoggedIn}) {
           </div>
         </div>
 
-        {/* ... (rest of the JSX code) */}
+      
       </main>
     </>
   )

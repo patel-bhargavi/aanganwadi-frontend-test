@@ -6,6 +6,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useCallback } from "react";
+import { Link } from 'react-router-dom';
 import Spinner from '../Components/Spinner'
 
 const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
@@ -52,6 +53,7 @@ const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
         }
       );
       const responseData = response.data.data;
+    
       setData(responseData);
       setTotalPages(Math.ceil(response.data.total_items / itemsPerPage));
       setCurrentPage(page);
@@ -152,9 +154,9 @@ const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
           className={`page-item ${i === currentPage ? 'active' : ''}`}
           onClick={() => handlePageClick(i)}
         >
-          <a className="page-link" href="#">
+          <Link className="page-link" to="#" >
             {i}
-          </a>
+          </Link>
         </li>
       );
     }
@@ -162,23 +164,23 @@ const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
       <nav aria-label="Page navigation">
       <ul className="pagination">
         <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-          <a
+          <Link
             className="page-link"
-            href="#"
+            to="#"
             onClick={() => handlePageClick(currentPage - 1)}
           >
             Previous
-          </a>
+          </Link>
         </li>
         {pageNumbers}
         <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-          <a
+          <Link
             className="page-link"
-            href="#"
+            to="#"
             onClick={() => handlePageClick(currentPage + 1)}
           >
             Next
-          </a>
+          </Link>
         </li>
       </ul>
     </nav>
