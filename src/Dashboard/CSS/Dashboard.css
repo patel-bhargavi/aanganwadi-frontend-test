@@ -1,0 +1,98 @@
+.dashboard-card-container {
+    width: 80vw;
+    height: 12vh;
+    display: flex;
+    justify-content: space-evenly;
+  }
+  
+  .dashboard-card {
+    width: 15vw;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card-icon {
+    font-size: xx-large;
+    text-align: center;
+    width: 35%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #faf9f6;
+  }
+  
+  .card-desc .card-title {
+    color: #999999;
+    font-weight: bold;
+   
+  }
+  
+  .card-desc .card-info {
+    color: #000;
+    font-weight: bold;
+    font-size: larger;
+  }
+  
+  .card-desc {
+    width: 65%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: white;
+
+  }
+  
+  #card1 {
+    background-color: #57cfad;
+    height: 100%;
+  }
+  
+  #card2 {
+    background-color: #9f9dff;
+    height: 100%;
+  }
+  
+  #card3 {
+    background-color: #ffa17a;
+    height: 100%;
+  }
+  
+  #card4 {
+    background-color: #c8b596;
+    height: 100%;
+  }
+  
+  @media (max-width: 990px) {
+    .dashboard-card-container {
+      flex-wrap: wrap;
+      width: 80vw;
+    }
+  
+    .dashboard-card {
+      width: 45%;
+      margin: 10px;
+      background-color: white;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .dashboard-card-container {
+      width: 90vw;
+    }
+  
+    .dashboard-card {
+      width: 80%;
+    }
+  
+    .card-desc .card-title {
+      font-size: smaller;
+    }
+  
+    .card-desc .card-info {
+      font-size: smaller;
+    }
+  }

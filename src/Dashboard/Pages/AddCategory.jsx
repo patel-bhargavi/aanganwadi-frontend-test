@@ -194,7 +194,7 @@ const AddCategory = ({ setIsLoading, setIsLoggedIn }) => {
   return (
     <>
       <Header OpenSidebar={OpenSidebar} setIsLoggedIn={setIsLoggedIn} />
-      <Sidebar openSidebarToggle={openSidebarToggle} OpenSidebar={OpenSidebar} />
+      <Sidebar openSidebarToggle={openSidebarToggle} setIsLoggedIn={setIsLoggedIn} OpenSidebar={OpenSidebar} />
       <main className="main-container">
         <div className="custom-container">
           <div className="p-5 mb-4 ml-3 bg-light rounded-3 custom-form">
