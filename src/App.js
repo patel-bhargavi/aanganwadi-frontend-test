@@ -25,8 +25,7 @@ function App() {
       <div>
         <div className='grid-container' >
 
-
-          <Routes basename={"https://aanganwadi-frontend.onrender.com"}>
+          <Routes>
             <Route element={<PrivateRouter />}>
             <Route path='/dashboard' element={<Dashboard setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />}></Route>
             <Route path='/name-list' element={<NameList />}></Route>
@@ -38,9 +37,7 @@ function App() {
             </Route>
             <Route path='/' element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} setIsLoading={setIsLoading} isLoading={isLoading} />}></Route>
           </Routes>
-
         </div>
-
       </div>
 
 
