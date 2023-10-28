@@ -2,10 +2,19 @@
 import { AiOutlineUsergroupAdd, AiOutlineClose, AiOutlineAppstoreAdd } from 'react-icons/ai';
 import { MdOutlineManageAccounts } from 'react-icons/md';
 import { LuLayoutDashboard } from 'react-icons/lu';
-import {CgProfile} from 'react-icons/cg'
+// import {CgProfile} from 'react-icons/cg'
 import {BiLogOut} from 'react-icons/bi'
+import { useNavigate } from 'react-router-dom';
+import {toast} from 'react-toastify'
 
-function Sidebar({ openSidebarToggle, OpenSidebar }) {
+function Sidebar({ openSidebarToggle, OpenSidebar , setIsLoggedIn }) {
+    const navigate = useNavigate();
+    const handleLogout = async (e) => { 
+        localStorage.removeItem('token');
+        setIsLoggedIn(false);
+        navigate('/');
+        toast.success('Logout Sucessfully')
+      }
 
     return (
         <aside id="sidebar" className={openSidebarToggle ? "sidebar-responsive" : ""} >
@@ -31,7 +40,7 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
                     </a>
                 </li> */}
                 <hr className='' />
-                <p className='m-3'>Users </p>
+                <p className='m-3 fw-bold'>Users </p>
                 <li className='sidebar-list-item'>
                     <a href={`/add-user`}>
                         <AiOutlineUsergroupAdd className='icon' /> Add User
@@ -43,7 +52,7 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
                     </a>
                 </li>
                 <hr className='' />
-                <p className=' m-3'>Category </p>
+                <p className=' m-3 fw-bold'>Category </p>
                 <li className='sidebar-list-item'>
                     <a href={`/add-category`}>
                         <AiOutlineAppstoreAdd className='icon' /> Add Category
@@ -51,15 +60,11 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
                 </li>
                 <hr className='' />
                  
-                <li className='sidebar-list-item'>
-                    <a href={`/profile`}>
-                        <CgProfile className='icon' /> Profile
-                    </a>
-                </li>
-                <li className='sidebar-list-item'>
-                    <a href={`/`}>
-                        <BiLogOut className='icon' />Logout
-                    </a>
+                
+                <li className='sidebar-list-item bg-danger text-white'>
+                    {/* <a href={`/`} className='text-white'> */}
+                        <BiLogOut className='icon' onClick={handleLogout}  />Logout
+                    {/* </a> */}
                 </li>
               
 

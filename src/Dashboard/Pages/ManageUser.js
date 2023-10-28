@@ -190,7 +190,7 @@ const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
   return (
     <>
       <Header OpenSidebar={OpenSidebar} setIsLoggedIn={setIsLoggedIn} />
-      <Sidebar openSidebarToggle={openSidebarToggle} OpenSidebar={OpenSidebar} />
+      <Sidebar openSidebarToggle={openSidebarToggle} setIsLoggedIn={setIsLoggedIn} OpenSidebar={OpenSidebar} />
       <main className="main-container">
         <div className="main-title">
           <h3>MANAGE USERS</h3>

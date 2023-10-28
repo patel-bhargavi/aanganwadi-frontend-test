@@ -50,21 +50,22 @@ function Dashboard({ setIsLoggedIn }) {
       <Sidebar
         openSidebarToggle={openSidebarToggle}
         OpenSidebar={OpenSidebar}
+        setIsLoggedIn={setIsLoggedIn}
       />
 
       <main className="main-container">
-      <div className="custom-container">
+      {/* <div className="custom-container"> */}
         <div className="main-title">
           <h3>DASHBOARD</h3>
         </div>
 
-        <div className="dashboard-card-container  d-flex mt-4">
+        <div className="dashboard-card-container d-flex mt-4">
           <div className="dashboard-card d-flex flex-row">
             <div className="card-icon" id="card1">
               <BiSolidTruck />
             </div>
             <div className="card-desc text-center">
-              <p className="card-title mt-">Supplied</p>
+              <p className="card-title mt-2">Supplied</p>
               <p className="card-info">12.2 K</p>
             </div>
           </div>
@@ -96,7 +97,7 @@ function Dashboard({ setIsLoggedIn }) {
             </div>
           </div>
         </div>
-        </div>
+        {/* </div> */}
         {/* ... (rest of the JSX code) */}
       </main>
     </>

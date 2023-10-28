@@ -61,7 +61,7 @@ const AddUser = ({ setIsLoggedIn }) => {
   return (
     <>
       <Header OpenSidebar={OpenSidebar} setIsLoggedIn={setIsLoggedIn} />
-      <Sidebar openSidebarToggle={openSidebarToggle} OpenSidebar={OpenSidebar} />
+      <Sidebar openSidebarToggle={openSidebarToggle} setIsLoggedIn={setIsLoggedIn} OpenSidebar={OpenSidebar} />
       <main className="main-container">
         <div className="container">
           <div className="row justify-content-center">

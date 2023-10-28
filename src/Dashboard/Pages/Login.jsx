@@ -67,11 +67,11 @@ function Login({ setIsLoggedIn, isLoggedIn , isLoading , setIsLoading}) {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-              </div>
-              <div className="d-grid">
+              <div className="d-grid mt-4">
                 <button className="btn" id="login_btn" type="submit" disabled={isLoading}>
                   {isLoading ? 'Logging in...' : 'Log In'}
-                </button>
+               </button>
+              </div>
               </div>
             </form>
           </div>
