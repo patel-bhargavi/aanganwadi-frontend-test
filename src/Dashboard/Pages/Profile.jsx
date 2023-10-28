@@ -26,14 +26,13 @@ const Profile = ({ setIsLoggedIn }) => {
                                 <div className="col-xl-4">
                                     {/* Profile picture card*/}
                                     <div className="card mb-4 mb-xl-0">
-                                        <div className="card-header">Profile Picture</div>
+                                        <div className="card-header">Khushali Trivedi</div>
                                         <div className="card-body text-center">
 
                                             <img className="img-account-profile rounded-circle mb-2" src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png" alt="" />
 
-                                            <div className="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
+                                            <div className="small font-italic text-muted mb-4">Role: <b>Admin</b></div>
 
-                                            <button className="btn btn-primary" type="button">Upload new image</button>
                                         </div>
                                     </div>
                                 </div>
@@ -45,7 +44,7 @@ const Profile = ({ setIsLoggedIn }) => {
                                             <form>
 
                                                 <div className="mb-3">
-                                                    <label className="small mb-1" htmlFor="inputUsername">Name(how your name will appear to other users on the site)</label>
+                                                    <label className="small mb-1" htmlFor="inputUsername">Name</label>
                                                     <input className="form-control" id="inputUsername" type="text" placeholder="Enter your username" value="username" />
                                                 </div>
 
