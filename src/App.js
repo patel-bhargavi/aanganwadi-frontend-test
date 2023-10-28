@@ -5,7 +5,7 @@ import Dashboard from './Dashboard/Pages/Dashboard'
 import NameList from './Dashboard/Pages/NameList';
 import React, { useState } from "react";
 import Login from './Dashboard/Pages/Login';
-import PrivateRouter from './Dashboard/Components/PrivateRouter';
+import PrivateRoute from './Dashboard/Components/PrivateRouter';
 import AddUser from './Dashboard/Pages/AddUser';
 import ManageUser from './Dashboard/Pages/ManageUser';
 import AddCategory from './Dashboard/Pages/AddCategory'
@@ -27,7 +27,7 @@ function App() {
 
 
           <Routes>
-            <Route element={<PrivateRouter />}>
+            <Route element={<PrivateRoute />}>
             <Route path='/dashboard' element={<Dashboard setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />}></Route>
             <Route path='/name-list' element={<NameList />}></Route>
             <Route path='/add-user' element={<AddUser setIsLoggedIn={setIsLoggedIn} />}></Route>
