@@ -6,8 +6,6 @@ import '../CSS/Profile.css';
 
 const Profile = ({ setIsLoggedIn }) => {
     const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
-
-
     const OpenSidebar = () => {
         setOpenSidebarToggle(!openSidebarToggle);
     };
