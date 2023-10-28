@@ -5,7 +5,7 @@ import Dashboard from './Dashboard/Pages/Dashboard'
 import NameList from './Dashboard/Pages/NameList';
 import React, { useState } from "react";
 import Login from './Dashboard/Pages/Login';
-import PrivateRoute from './Dashboard/Components/PrivateRouter';
+import PrivateRouter from './Dashboard/Components/PrivateRouter';
 import AddUser from './Dashboard/Pages/AddUser';
 import ManageUser from './Dashboard/Pages/ManageUser';
 import AddCategory from './Dashboard/Pages/AddCategory'
@@ -26,8 +26,8 @@ function App() {
         <div className='grid-container' >
 
 
-          <Routes>
-            <Route element={<PrivateRoute />}>
+          <Routes basename={"https://aanganwadi-frontend.onrender.com"}>
+            <Route element={<PrivateRouter />}>
             <Route path='/dashboard' element={<Dashboard setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />}></Route>
             <Route path='/name-list' element={<NameList />}></Route>
             <Route path='/add-user' element={<AddUser setIsLoggedIn={setIsLoggedIn} />}></Route>
