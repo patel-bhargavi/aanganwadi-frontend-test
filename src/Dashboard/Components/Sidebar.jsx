@@ -6,6 +6,7 @@ import { LuLayoutDashboard } from 'react-icons/lu';
 import {BiLogOut} from 'react-icons/bi'
 import { useNavigate } from 'react-router-dom';
 import {toast} from 'react-toastify'
+import {Button} from 'react-bootstrap'
 
 function Sidebar({ openSidebarToggle, OpenSidebar , setIsLoggedIn }) {
     const navigate = useNavigate();
@@ -55,9 +56,12 @@ function Sidebar({ openSidebarToggle, OpenSidebar , setIsLoggedIn }) {
                 <hr className='' />
                  
                 
-                <li className='sidebar-list-item bg-danger text-white'>
+                <li className='sidebar-list-item text-white'>
                     {/* <a href={`/`} className='text-white'> */}
-                        <BiLogOut className='icon' onClick={handleLogout}  />Logout
+                    <Button onClick={handleLogout} className='btn btn-danger w-100'>
+
+                        <BiLogOut className='icon'  />Logout
+                    </Button>
                     {/* </a> */}
                 </li>
               
