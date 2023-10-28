@@ -5,8 +5,11 @@ import {FiMenu} from 'react-icons/fi'
 import {AiFillSetting} from 'react-icons/ai'
 
 import { Dropdown } from 'react-bootstrap';
+
 import { useState , useEffect } from 'react';
 import {BsFillCalendarFill,BsPersonVcardFill } from 'react-icons/bs'
+
+
 
 function Header({ OpenSidebar, setIsLoggedIn }) {
 
@@ -38,8 +41,9 @@ function Header({ OpenSidebar, setIsLoggedIn }) {
   }).format(currentDate);
 
 
-  return (
 
+  return (
+<>
 
 <header className='header'>
 <div className='menu-icon'>
@@ -55,20 +59,26 @@ function Header({ OpenSidebar, setIsLoggedIn }) {
 
 <div className='header-left'>
   <div style={dropdownStyles} >
-    <Dropdown>
+    <Dropdown className=''>
       <Dropdown.Toggle variant="success" id="dropdown-basic">
         <BsPersonCircle className='' />
       </Dropdown.Toggle>
-      <Dropdown.Menu className='text-center mw-80px'>
-        <Dropdown.Item href={`/profile`}><BsPersonVcardFill />Profile</Dropdown.Item>
-        <Dropdown.Item>
-         <AiFillSetting/> Settings
-        </Dropdown.Item>
+      <Dropdown.Menu className='text-center'>
+        <Dropdown.Item href={`/profile`}>
+          <BsPersonVcardFill />  Profile
+          </Dropdown.Item>
+          <Dropdown.Item >
+        <AiFillSetting /> Settings
+      </Dropdown.Item>
+
       </Dropdown.Menu>
     </Dropdown>
   </div>
 </div>
 </header>
+
+
+        </>
   )
 }
 

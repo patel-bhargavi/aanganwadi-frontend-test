@@ -34,7 +34,7 @@ function App() {
             <Route path='/manage-users' element={<ManageUser setIsLoggedIn={setIsLoggedIn} setIsLoading={setIsLoading} isLoading={isLoading} />}></Route>
             <Route path='/add-category' element={<AddCategory setIsLoggedIn={setIsLoggedIn} setIsLoading={setIsLoading} isLoading={isLoading} />}></Route>
             <Route path='/profile' element={<Profile setIsLoggedIn={setIsLoggedIn} />}></Route>
-        
+          
             </Route>
             <Route path='/' element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} setIsLoading={setIsLoading} isLoading={isLoading} />}></Route>
           </Routes>

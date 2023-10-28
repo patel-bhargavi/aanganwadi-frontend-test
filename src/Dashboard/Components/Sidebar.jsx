@@ -32,13 +32,7 @@ function Sidebar({ openSidebarToggle, OpenSidebar , setIsLoggedIn }) {
                         <LuLayoutDashboard className='icon' /> Dashboard
                     </a>
                 </li>
-                {/* <hr className='text-white'/>
-                    <p className='text-white'>Inventories</p>
-                <li className='sidebar-list-item'>
-                    <a href={`/name-list`}>
-                        <AiOutlineUnorderedList className='icon' /> Aanganwadis
-                    </a>
-                </li> */}
+              
                 <hr className='' />
                 <p className='m-3 fw-bold'>Users </p>
                 <li className='sidebar-list-item'>

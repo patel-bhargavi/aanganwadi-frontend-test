@@ -53,7 +53,7 @@ function Login({ setIsLoggedIn, isLoggedIn , isLoading , setIsLoading}) {
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
-              <div className="mb-5">
+              <div className="mb-5 ">
                 {/* <label htmlFor="password" className="form-label fw-bold float-start">
                   Password
                 </label> */}

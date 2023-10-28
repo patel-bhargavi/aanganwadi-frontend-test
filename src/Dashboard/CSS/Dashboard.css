@@ -3,6 +3,7 @@
     height: 12vh;
     display: flex;
     justify-content: space-evenly;
+    margin-left: -5%;
   }
   
   .dashboard-card {
@@ -70,6 +71,7 @@
     .dashboard-card-container {
       flex-wrap: wrap;
       width: 80vw;
+       margin-left: 0;
     }
   
     .dashboard-card {
@@ -94,5 +96,6 @@
   
     .card-desc .card-info {
       font-size: smaller;
+      
     }
   }
