@@ -38,9 +38,7 @@ function App() {
             </Route>
             <Route path='/' element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} setIsLoading={setIsLoading} isLoading={isLoading} />}></Route>
           </Routes>
-
         </div>
-
       </div>
 
 

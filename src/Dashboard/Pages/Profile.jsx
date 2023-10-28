@@ -70,15 +70,23 @@ const Profile = ({ setIsLoggedIn }) => {
                                 <div className="col-xl-4">
                                     {/* Profile picture card*/}
                                     <div className="card mb-4 mb-xl-0">
-                                        {/* <div className="card-header">Khushali Trivedi</div> */}
+
+                   
+
+                                      
                                         <div className="card-body text-center">
 
                                             <img className="img-account-profile rounded-circle mb-2" src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png" alt="" />
+
 
                                             <div className="font-italic mb-1 h4">{profileData.name}</div>
                                             <div className="small font-italic text-muted">{profileData.email}</div>
                                             <div className="small font-italic text-muted">{profileData.number}</div>
                                             <div className="small font-italic text-muted">Role: <b>{profileData.users_role_id}</b></div>
+
+                                        
+
+
                                         </div>
                                     </div>
                                 </div>
@@ -91,7 +99,11 @@ const Profile = ({ setIsLoggedIn }) => {
 
                                                 <div className="mb-3">
                                                     <label className="small mb-1" htmlFor="inputUsername">Name</label>
+
                                                     <input className="form-control" id="inputUsername" type="text" placeholder="Enter your username" value={profileData.name} />
+
+                                                    
+
                                                 </div>
 
                                                 <div className="mb-3">
