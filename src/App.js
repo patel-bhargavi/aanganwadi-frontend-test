@@ -26,7 +26,7 @@ function App() {
         <div className='grid-container' >
 
 
-          <Routes basename={"https://aanganwadi-frontend.onrender.com"}>
+          <Routes basename={"/"}>
             <Route element={<PrivateRouter />}>
             <Route path='/dashboard' element={<Dashboard setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />}></Route>
             <Route path='/name-list' element={<NameList />}></Route>
