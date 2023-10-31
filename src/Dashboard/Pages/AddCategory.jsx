@@ -7,10 +7,10 @@ import { Table, Button, Modal } from "react-bootstrap";
 import { useCallback } from 'react';
 import Header from "../Components/Header";
 import Sidebar from "../Components/Sidebar";
+import Spinner from '../Components/Spinner';
 
 
-
-const AddCategory = ({ setIsLoading, setIsLoggedIn }) => {
+const AddCategory = ({ setIsLoading, setIsLoggedIn , isLoading}) => {
 
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
 
@@ -58,7 +58,7 @@ const AddCategory = ({ setIsLoading, setIsLoggedIn }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    console.log(`Name: ${name}, Value: ${value}`);
+   
     setSelectedCategory({
       ...selectedCategory,
       [name]: value,
@@ -75,7 +75,7 @@ const AddCategory = ({ setIsLoading, setIsLoggedIn }) => {
         formData,
         {
           headers: {
-            Token: token,
+            token: token,
           },
         }
       );
@@ -207,14 +207,17 @@ const AddCategory = ({ setIsLoading, setIsLoggedIn }) => {
                   name="category_name"
                   className="form-control"
                   value={formData.category_name}
-                  onChange={handleInputChange}
+                  onChange={(e) => setFormData({ ...formData, category_name: e.target.value })}
                 />
               </div>
               <button className="btn btn-primary">Add Category</button>
             </form>
           </div>
           <div className="table-responsive">
+          {isLoading ? ( <Spinner />
+               ) : (
             <Table responsive className="table table-striped table-hover">
+           
               <thead>
                 <tr>
                   <th>ID</th>
@@ -223,6 +226,7 @@ const AddCategory = ({ setIsLoading, setIsLoggedIn }) => {
                 </tr>
               </thead>
               <tbody>
+             
                 {categories.map((category, index) => (
                   <tr key={category.category_id}>
                     <td>{index + 1}</td>
@@ -246,6 +250,7 @@ const AddCategory = ({ setIsLoading, setIsLoggedIn }) => {
 
               </tbody>
             </Table>
+                )}
           </div>
         </div>
       </main>

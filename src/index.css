@@ -487,7 +487,46 @@ background-color: #009879;
 }
 
 
+/* language Modal  */
 
+/* Add this to your CSS file */
+.modal-right {
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 30%; /* Adjust this value as needed */
+  background-color: white;
+  border-left: 1px solid #ccc;
+  z-index: 1050;
+  overflow-x: hidden;
+  transition: 0.5s;
+  transform: translateX(100%);
+  padding: 20px;
+}
 
+.modal-right.show {
+  transform: translateX(0);
+}
 
+.search-filter-container {
+  @media screen and (max-width: 1155px) {
+    flex-direction: column;
+    margin-left: 0;
+  }
+}
 
+ .search {
+  width: 35%;
+  border-color: #0056b3;
+
+  @media screen and (max-width: 1155px) {
+    width: 80%;
+  }
+}
+.s-f-label {
+  margin-left: 0.65rem;
+ @media screen and (max-width: 1155px) {
+    margin-left: 0%;
+  }
+}

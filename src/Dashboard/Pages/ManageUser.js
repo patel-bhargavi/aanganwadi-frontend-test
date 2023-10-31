@@ -6,8 +6,8 @@ import "bootstrap/dist/css/bootstrap.css";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useCallback } from "react";
-import { Link } from 'react-router-dom';
-import Spinner from '../Components/Spinner'
+import { Link } from "react-router-dom";
+import Spinner from "../Components/Spinner";
 
 const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
@@ -21,6 +21,45 @@ const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
 
   const itemsPerPage = 10;
 
+  const [filter, setFilter] = useState("");
+  const [selectedUserRole, setSelectedUserRole] = useState("All");
+  const [sortKey, setSortKey] = useState("latest"); // Default sorting by name ascending
+
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value);
+  };
+
+  const handleRoleFilterChange = (event) => {
+    setSelectedUserRole(event.target.value);
+  };
+
+  const handleSortChange = (value) => {
+    setSortKey(value);
+  };
+
+  const filteredData = data
+    .filter((item) => {
+      if (selectedUserRole === "All") {
+        return true;
+      } else {
+        return item.users_role_id === selectedUserRole;
+      }
+    })
+    .filter(
+      (item) =>
+        item.name.toLowerCase().includes(filter.toLowerCase()) ||
+        item.email.toLowerCase().includes(filter.toLowerCase())
+    );
+
+    const sortedData = [...filteredData].sort((a, b) => {
+      if (sortKey === "latest") {
+        // Sort by latest (by assuming there's a date field for the latest)
+        return new Date(b.dateField) - new Date(a.dateField);
+      } else if (sortKey === "all") {
+        return a.users_id - b.users_id; // Sort by user ID or any appropriate field
+      }
+      return 0; // Default, no sorting
+    });
   const closeModal = () => {
     setEditUserData(null);
     setSelectedUserId(null);
@@ -37,32 +76,41 @@ const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
     setModalVisibility(true);
   };
 
-  const fetchData = useCallback(async (page) => {
-    setIsLoading(true);
-    try {
-      const response = await axios.get(
-        `https://aanganwadi-test.onrender.com/api/v1/user/get_users/${page}`,
-        {
-          params: {
-            page: page,
-            perPage: itemsPerPage,
-          },
-          headers: {
-            Token: token,
-          },
+  const fetchData = useCallback(
+    async (page) => {
+      setIsLoading(true);
+      try {
+        const response = await axios.get(
+          `https://aanganwadi-test.onrender.com/api/v1/user/get_users/${page}`,
+          {
+            params: {
+              page: page,
+              perPage: itemsPerPage,
+              filter: filter, // Send filter value to the backend
+              sort: sortKey, // Send sortKey value to the backend
+            },
+            headers: {
+              token: token,
+            },
+          }
+        );
+        if (response.data.status === "failure") {
+          toast.error(response.data.msg);
+        } else {
+          const responseData = response.data.data;
+          setData(responseData);
+          console.log(responseData)
+          setTotalPages(Math.ceil(response.data.total_items / itemsPerPage));
+          setCurrentPage(page);
         }
-      );
-      const responseData = response.data.data;
-    
-      setData(responseData);
-      setTotalPages(Math.ceil(response.data.total_items / itemsPerPage));
-      setCurrentPage(page);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [setIsLoading, token, itemsPerPage]);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [setIsLoading, token, itemsPerPage, filter, sortKey]
+  );
 
   useEffect(() => {
     fetchData(currentPage);
@@ -80,10 +128,14 @@ const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
           },
         }
       );
-      console.log(response);
-      closeModal();
-      fetchData(currentPage);
-      toast.success("Updated successfully");
+      if (response.data.status === "failure") {
+        toast.error(response.data.msg);
+      } else {
+        console.log(response);
+        closeModal();
+        fetchData(currentPage);
+        toast.success("Updated successfully");
+      }
     } catch (error) {
       console.error("Error updating user data:", error);
     }
@@ -96,16 +148,17 @@ const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
         null,
         {
           headers: {
-            Token: token,
+            token: token,
           },
         }
       );
       console.log(response);
-      if (response.status === 200) {
-        fetchData(currentPage);
-        toast.success("User deleted successfully");
+      if (response.data.status === "failure") {
+        toast.error(response.data.msg);
       } else {
-        console.error("Error deleting user:", response);
+        fetchData(currentPage);
+
+        toast.success("User deleted successfully");
       }
     } catch (error) {
       console.error("Error deleting user:", error);
@@ -114,7 +167,8 @@ const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
 
   const renderData = () => {
     const startIndex = (currentPage - 1) * itemsPerPage + 1;
-    return data.map((item, index) => (
+
+    return sortedData.map((item, index) => (
       <tr key={index}>
         <td>{startIndex + index}</td>
         <td>{item.name}</td>
@@ -151,10 +205,10 @@ const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
       pageNumbers.push(
         <li
           key={i}
-          className={`page-item ${i === currentPage ? 'active' : ''}`}
+          className={`page-item ${i === currentPage ? "active" : ""}`}
           onClick={() => handlePageClick(i)}
         >
-          <Link className="page-link" to="#" >
+          <Link className="page-link" to="#">
             {i}
           </Link>
         </li>
@@ -162,62 +216,122 @@ const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
     }
     return (
       <nav aria-label="Page navigation">
-      <ul className="pagination">
-        <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-          <Link
-            className="page-link"
-            to="#"
-            onClick={() => handlePageClick(currentPage - 1)}
+        <ul className="pagination">
+          <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+            <Link
+              className="page-link"
+              to="#"
+              onClick={() => handlePageClick(currentPage - 1)}
+            >
+              Previous
+            </Link>
+          </li>
+          {pageNumbers}
+          <li
+            className={`page-item ${
+              currentPage === totalPages ? "disabled" : ""
+            }`}
           >
-            Previous
-          </Link>
-        </li>
-        {pageNumbers}
-        <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-          <Link
-            className="page-link"
-            to="#"
-            onClick={() => handlePageClick(currentPage + 1)}
-          >
-            Next
-          </Link>
-        </li>
-      </ul>
-    </nav>
+            <Link
+              className="page-link"
+              to="#"
+              onClick={() => handlePageClick(currentPage + 1)}
+            >
+              Next
+            </Link>
+          </li>
+        </ul>
+      </nav>
     );
   };
 
   return (
     <>
       <Header OpenSidebar={OpenSidebar} setIsLoggedIn={setIsLoggedIn} />
-      <Sidebar openSidebarToggle={openSidebarToggle} setIsLoggedIn={setIsLoggedIn} OpenSidebar={OpenSidebar} />
+      <Sidebar
+        openSidebarToggle={openSidebarToggle}
+        setIsLoggedIn={setIsLoggedIn}
+        OpenSidebar={OpenSidebar}
+      />
       <main className="main-container">
         <div className="main-title">
           <h3>MANAGE USERS</h3>
         </div>
 
-        {isLoading ? (
-          <Spinner />
-        ) : (
-          <div className="table-responsive">
-            <Table responsive className="table table-striped table-hover">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Mobile No</th>
-                  <th>Role</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>{renderData()}</tbody>
-            </Table>
-          </div>
-        )}
+        <div className="mt-2 bg-light p-3">
+          <p className="bold">All Users</p>
+          <div className=" search-filter-container d-flex  mt-1 grid gap-3 ">
+            <input
+              className="search mb-3 rounded p-2 "
+              placeholder="Search User by Name/Email"
+              value={filter}
+              onChange={handleFilterChange}
+            />
 
-        <nav>{renderPagination()}</nav>
+            <div className="search-label-box ">
+              <span
+                className="p-2 rounded-start fw-semibold s-f-label text-light"
+                style={{ backgroundColor: "#3498db" }}
+              >
+                Name/Email
+              </span>
+              <select
+            className="mb-3 rounded p-2 filter"
+            onChange={(e) => handleSortChange(e.target.value)}
+            value={sortKey}
+          >
+            <option className="opt" value="latest">
+              Latest
+            </option>
+            <option className="opt" value="all">
+              All
+            </option>
+          </select>
+            </div>
+            <div className="filter-label-box">
+              <span
+                className="p-2  rounded-start fw-semibold s-f-label text-light"
+                style={{ backgroundColor: "#3498db" }}
+              >
+                Role
+              </span>
+
+              <select
+                className="mb-3 rounded p-2 filter"
+                onChange={handleRoleFilterChange}
+                value={selectedUserRole}
+              >
+                <option value="All">All</option>
+                <option value="Admin">Admin</option>
+                <option value="Employee">Employee</option>
+              </select>
+            </div>
+          </div>
+
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            <div className="table-responsive">
+              <Table responsive className="table table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Mobile No</th>
+                    <th>Role</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>{renderData()}</tbody>
+              </Table>
+            </div>
+          )}
+
+          <nav>{renderPagination()}</nav>
+        </div>
       </main>
+
       <Modal show={isModalVisible} onHide={closeModal}>
         <Modal.Header closeButton>
           <Modal.Title>Edit User</Modal.Title>
@@ -273,7 +387,9 @@ const ManageUser = ({ setIsLoggedIn, setIsLoading, isLoading }) => {
                 className="form-select"
                 name="users_role_id"
                 id="users_role_id"
-                defaultValue={editUserData ? editUserData.users_role_id : "Admin"}
+                defaultValue={
+                  editUserData ? editUserData.users_role_id : "Admin"
+                }
               >
                 <option value="Admin">Admin</option>
                 <option value="Employee">Employee</option>

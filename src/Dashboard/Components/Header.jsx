@@ -4,11 +4,11 @@ import {  BsPersonCircle }
 import {FiMenu} from 'react-icons/fi'
 import {AiFillSetting} from 'react-icons/ai'
 
-import { Dropdown } from 'react-bootstrap';
+import { Dropdown, Modal } from 'react-bootstrap';
 
 import { useState , useEffect } from 'react';
-import {BsFillCalendarFill,BsPersonVcardFill } from 'react-icons/bs'
-
+import {BsFillCalendarFill } from 'react-icons/bs'
+import {MdAccountBox} from 'react-icons/md';
 
 
 function Header({ OpenSidebar, setIsLoggedIn }) {
@@ -40,6 +40,10 @@ function Header({ OpenSidebar, setIsLoggedIn }) {
     weekday: 'long',
   }).format(currentDate);
 
+  const [showModal, setShowModal] = useState(false)
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
 
 
   return (
@@ -60,14 +64,14 @@ function Header({ OpenSidebar, setIsLoggedIn }) {
 <div className='header-left'>
   <div style={dropdownStyles} >
     <Dropdown className=''>
-      <Dropdown.Toggle variant="success" id="dropdown-basic">
+      <Dropdown.Toggle variant="primary" id="dropdown-basic">
         <BsPersonCircle className='' />
       </Dropdown.Toggle>
-      <Dropdown.Menu className='text-center'>
+      <Dropdown.Menu className='text-start' style={{minWidth:"7rem"}}>
         <Dropdown.Item href={`/profile`}>
-          <BsPersonVcardFill />  Profile
+          <MdAccountBox /> Profile
           </Dropdown.Item>
-          <Dropdown.Item >
+          <Dropdown.Item onClick={toggleModal} >
         <AiFillSetting /> Settings
       </Dropdown.Item>
 
@@ -76,7 +80,16 @@ function Header({ OpenSidebar, setIsLoggedIn }) {
   </div>
 </div>
 </header>
+<Modal show={showModal} onHide={toggleModal} dialogClassName="modal-dialog-right"> 
+        <Modal.Header closeButton>
+          <Modal.Title>Language Setting</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {/* Add your selection input and settings content here */}
+          <p>Select Language</p>
 
+        </Modal.Body>
+      </Modal>
 
         </>
   )

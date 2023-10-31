@@ -14,11 +14,11 @@ import Profile from './Dashboard/Pages/Profile';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // New loading state
+  const [isLoading, setIsLoading] = useState(false); 
 
-
-
-
+  
+  
+  
   return (
     <>
 
@@ -27,17 +27,18 @@ function App() {
 
 
           <Routes>
+            
             <Route element={<PrivateRouter />}>
-            <Route path='/dashboard' element={<Dashboard setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn} />}></Route>
+            <Route path='/dashboard' element={<Dashboard setIsLoggedIn={setIsLoggedIn} isLoggedIn={isLoggedIn}  />}></Route>
             <Route path='/name-list' element={<NameList />}></Route>
             <Route path='/add-user' element={<AddUser setIsLoggedIn={setIsLoggedIn} />}></Route>
             <Route path='/manage-users' element={<ManageUser setIsLoggedIn={setIsLoggedIn} setIsLoading={setIsLoading} isLoading={isLoading} />}></Route>
             <Route path='/add-category' element={<AddCategory setIsLoggedIn={setIsLoggedIn} setIsLoading={setIsLoading} isLoading={isLoading} />}></Route>
-            <Route path='/profile' element={<Profile setIsLoggedIn={setIsLoggedIn} />}></Route>
-          
-            </Route>
+            <Route path='/profile' element={<Profile setIsLoggedIn={setIsLoggedIn}   />}></Route>
+            </Route> 
             <Route path='/' element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} setIsLoading={setIsLoading} isLoading={isLoading} />}></Route>
-          </Routes>
+             
+            </Routes>
         </div>
       </div>
 

@@ -1,6 +1,6 @@
 // import React, { useState } from 'react'
-import React, { useState } from "react";
-// import axios from 'axios';
+import React, { useState  } from "react";
+
 
 import '../CSS/Dashboard.css'
 
@@ -10,33 +10,7 @@ import { FaBoxes, FaRupeeSign } from "react-icons/fa";
 import Header from "../Components/Header";
 import Sidebar from "../Components/Sidebar";
 function Dashboard({ setIsLoggedIn }) {
-  // const [data, setData] = useState([{
-  //   inventory_count: 0,
-  //   supply_count: 0,
-  //   customer_count: 0,
-  //   alerts_count: 0,
-  // }]);
-
-  // const fetchInfo = async () => {
-
-  //   return axios.get('https://49cf-2401-4900-78f3-88d5-bde6-d49d-8cc7-66cd.ngrok.io/fetch_counts').then(response => {
-  //     console.log(response)
-  //     setData(response.data);
-  //   });
-  // }
-
-  // useEffect(() => {
-  //   fetchInfo();
-  // }, []);
-
-  // let counts = {};
-  // data.map((data, index) => {
-  //   counts.inventory_count = data.inventory_count;
-  //   counts.customer_count = data.customer_count;
-  //   counts.alerts_count = data.alerts_count;
-  //   counts.supply_count = data.supply_count;
-  //   return 1;
-  // })
+ 
 
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
 
@@ -44,6 +18,8 @@ function Dashboard({ setIsLoggedIn }) {
     setOpenSidebarToggle(!openSidebarToggle);
   };
 
+
+  
   return (
     <>
       <Header OpenSidebar={OpenSidebar} setIsLoggedIn={setIsLoggedIn} />
